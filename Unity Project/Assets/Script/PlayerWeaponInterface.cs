@@ -19,8 +19,8 @@ public class PlayerWeaponInterface : MonoBehaviour {
     [Header("PickUp Check")]
     public Color GizmosColor;
     public LayerMask PickUp_Mask;
-    public Vector3 Offset;
-    public float Size = 1;
+    public float Offset = 2f;
+    public float Size = 1f;
 
     void Awake()
     {
@@ -65,20 +65,20 @@ public class PlayerWeaponInterface : MonoBehaviour {
     {
         Gizmos.color = GizmosColor;
 
-        float PosX = (transform.position.x + Offset.x) * Mathf.Cos(transform.rotation.y);
-        float PosY = (transform.position.y + Offset.y);
-        float PosZ = (transform.position.z + Offset.z) * -(Mathf.Cos(transform.rotation.y));
+        float PosX = transform.position.x * (Mathf.Cos(6 * transform.rotation.y * Mathf.PI / 180) * Offset);
+        float PosY = (transform.position.y);
+        float PosZ = transform.position.z * (Mathf.Sin(6 * transform.rotation.y * Mathf.PI / 180) * Offset);
 
         Vector3 CubePos = new Vector3(PosX, PosY, PosZ);
 
-        Gizmos.DrawCube(transform.position + Vector3.forward, Vector3.one * Size);
+        Gizmos.DrawCube(CubePos, Vector3.one * Size);
 
         Debug.Log(CubePos);
     }
 
     bool On_PickUpCheck()
     {
-        Collider[] collider = Physics.OverlapBox(transform.position + Offset, (Vector3.one * Size) / 2, transform.rotation, PickUp_Mask);
+        Collider[] collider = Physics.OverlapBox(transform.position, (Vector3.one * Size) / 2, transform.rotation, PickUp_Mask);
 
         return collider.Length > 0 ? true : false;
     }
