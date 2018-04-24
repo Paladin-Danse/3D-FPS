@@ -1001,6 +1001,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Gun_Pos: {fileID: 1353725792}
   PickUp_Text: {fileID: 1745109989}
+  PlayerCamera: {fileID: 347483008}
+  ShootPos: {fileID: 1379069382}
   GizmosColor: {r: 1, g: 1, b: 0, a: 1}
   PickUp_Mask:
     serializedVersion: 2
@@ -1156,6 +1158,11 @@ Transform:
   m_Father: {fileID: 347483009}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1379069382 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1867597676052440, guid: 0ce96cb96c129b84ead33b5e2f8a8f19,
+    type: 2}
+  m_PrefabInternal: {fileID: 1390438382}
 --- !u!1001 &1390438382
 Prefab:
   m_ObjectHideFlags: 0

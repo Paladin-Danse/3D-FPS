@@ -15,6 +15,8 @@ public class PlayerWeaponInterface : MonoBehaviour {
     float Range = 2.0f;
 
     public Text PickUp_Text;
+    public GameObject PlayerCamera;
+    public GameObject ShootPos;
 
     [Header("PickUp Check")]
     public Color GizmosColor;
@@ -64,21 +66,13 @@ public class PlayerWeaponInterface : MonoBehaviour {
     private void OnDrawGizmos()
     {
         Gizmos.color = GizmosColor;
-
-        float PosX = transform.position.x * (Mathf.Cos(6 * transform.rotation.y * Mathf.PI / 180) * Offset);
-        float PosY = (transform.position.y);
-        float PosZ = transform.position.z * (Mathf.Sin(6 * transform.rotation.y * Mathf.PI / 180) * Offset);
-
-        Vector3 CubePos = new Vector3(PosX, PosY, PosZ);
-
-        Gizmos.DrawCube(CubePos, Vector3.one * Size);
-
-        Debug.Log(CubePos);
+        
+        Gizmos.DrawSphere(ShootPos.transform.position, Size);
     }
 
     bool On_PickUpCheck()
     {
-        Collider[] collider = Physics.OverlapBox(transform.position, (Vector3.one * Size) / 2, transform.rotation, PickUp_Mask);
+        Collider[] collider = Physics.OverlapSphere(ShootPos.transform.position, Size, PickUp_Mask);
 
         return collider.Length > 0 ? true : false;
     }
