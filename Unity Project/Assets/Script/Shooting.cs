@@ -8,9 +8,7 @@ public class Shooting : MonoBehaviour {
 	Camera PlayerCamera;
 	[SerializeField]
 	Camera ZoomCamera;
-
-	[SerializeField]
-	GameObject Bullet;
+    
 	[SerializeField]
 	Transform ShootPos;
 	[SerializeField]
@@ -41,13 +39,13 @@ public class Shooting : MonoBehaviour {
 	bool On_Correction = false;
 	bool Zoom;
 
-	[SerializeField]
-	GameObject Gun;
+	
 
+    [SerializeField]
+    GameObject Bullet;
 
-
-	//UI
-	public Text AmmoText;
+    //UI
+    public Text AmmoText;
 	public Slider Reload_Gauge;
 
 	Vector3 v;
@@ -178,7 +176,7 @@ public class Shooting : MonoBehaviour {
 	{
 		if(Input.GetKeyDown(KeyCode.R))
 		{
-			if(On_Reload_Delay) return;
+			if(On_Reload_Delay || Magazine == Ammo ) return;
 
 			StartCoroutine("On_Reload");
 		}
@@ -202,8 +200,8 @@ public class Shooting : MonoBehaviour {
 	{
 		Quaternion Acc_Angle = ShootPos.rotation;
 
-		Acc_Angle.eulerAngles += new Vector3((Random.Range(-10.0f + (Accuracy/10.0f) , 10.0f - (Accuracy/10.0f))) - 1f, Random.Range(-10.0f + (Accuracy/10.0f) , 10.0f - (Accuracy/10.0f)), ShootPos.rotation.z);
-		Debug.Log(Random.Range(-10.0f + (Accuracy/10.0f) , 10.0f - (Accuracy/10.0f)));
+		Acc_Angle.eulerAngles += new Vector3((Random.Range(-10.0f + (Accuracy/10.0f), 10.0f - (Accuracy/10.0f))) - 1f, Random.Range(-10.0f + (Accuracy/10.0f) , 10.0f - (Accuracy/10.0f)), ShootPos.rotation.z);
+		Debug.Log(Random.Range(-10.0f + (Accuracy/10.0f), 10.0f - (Accuracy/10.0f)));
 		return Acc_Angle;
 	}
 
@@ -213,15 +211,13 @@ public class Shooting : MonoBehaviour {
 		ZoomCamera = status.ZoomCamera;
 
 		Accuracy = status.Accuracy;
-		None_Aim_Acc = Accuracy;
-
-		Magazine = status.Magazine;
+        None_Aim_Acc = Accuracy;
+        Rate_Of_Fire = status.Rate_Of_Fire;
+        Recoil_value = status.Recoil_value;
+        ReloadTime = status.ReloadTime;
+        Magazine = status.Magazine;
 		Ammo = Magazine;
 
-		Recoil_value = status.Recoil_value;
-
-		ReloadTime = status.ReloadTime;
-
-		Rate_Of_Fire = status.Rate_Of_Fire;
-	}
+        AmmoText.text = Ammo.ToString() + " / " + Magazine.ToString();
+    }
 }

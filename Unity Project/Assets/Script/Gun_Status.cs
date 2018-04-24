@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Gun_Status : MonoBehaviour {
-
+    public Vector3 StandardRotation;
 	public Transform ShootPos;
 	public Camera ZoomCamera;
 

@@ -122,7 +122,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4024862019175966}
   - component: {fileID: 95559750544648734}
-  m_Layer: 0
+  - component: {fileID: 114241426781648246}
+  m_Layer: 8
   m_Name: SubmachineGun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -295,9 +296,9 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1534423766357156}
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: -1, z: 1.72}
-  m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.05000003, y: 0.05, z: 0.05000003}
   m_Children:
   - {fileID: 4997257638887088}
   - {fileID: 4308767908925776}
@@ -1017,6 +1018,25 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114241426781648246
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1534423766357156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85e855495b993ce489dc229b6012b40c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  StandardRotation: {x: 0, y: 90, z: 0, w: 0}
+  ShootPos: {fileID: 4410654235467450}
+  ZoomCamera: {fileID: 20136132395532034}
+  Accuracy: 90
+  Rate_Of_Fire: 0.11
+  Recoil_value: 0.8
+  ReloadTime: 3
+  Magazine: 30
 --- !u!124 &124374882984427130
 Behaviour:
   m_ObjectHideFlags: 1

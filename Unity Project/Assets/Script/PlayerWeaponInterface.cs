@@ -5,7 +5,8 @@ using UnityEngine.UI;
 using UnityEditor;
 
 public class PlayerWeaponInterface : MonoBehaviour {
-	public Transform Gun_Pos;
+    Shooting shooting;
+    public Transform Gun_Pos;
 
 	Ray Action_Ray;
 	RaycastHit Action_Hit;
@@ -16,7 +17,7 @@ public class PlayerWeaponInterface : MonoBehaviour {
 
     public Text PickUp_Text;
     public GameObject PlayerCamera;
-    public GameObject ShootPos;
+    public Transform ShootPos;
 
     [Header("PickUp Check")]
     public Color GizmosColor;
@@ -24,9 +25,21 @@ public class PlayerWeaponInterface : MonoBehaviour {
     public float Offset = 2f;
     public float Size = 1f;
 
+    [SerializeField]
+    GameObject EquipGun;
+
+    GameObject[] Gun_List;
+
     void Awake()
     {
+        shooting = GetComponent<Shooting>();
         PickUp_Text.enabled = false;
+
+        if (EquipGun)
+        {
+            Gun_Status gunStatus = EquipGun.GetComponent<Gun_Status>();
+            shooting.StatusChange(gunStatus);
+        }
     }
 
     // Use this for initialization
@@ -40,28 +53,44 @@ public class PlayerWeaponInterface : MonoBehaviour {
         Action_Ray.direction = Gun_Pos.transform.forward;
         Debug.DrawRay(Action_Ray.origin, Action_Ray.direction, Color.yellow);
 
-        isPickUp = On_PickUpCheck();
-        PickUp_Text.enabled = isPickUp;
+        Collider[] collider = Physics.OverlapSphere(ShootPos.transform.position, Size, PickUp_Mask);
+        isPickUp = On_PickUpCheck(collider);
 
-		if(Input.GetKeyDown(KeyCode.F))
-		{
-			
+        PickUp_Text.enabled = isPickUp;
+        
+        if(isPickUp && collider.Length > 0)
+        {
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                Get_Gun(collider[0].gameObject);
+            }
 		}
 	}
 
-	void Get_Gun(GameObject Gun)
+	void Get_Gun(GameObject New_Gun)
 	{
-		Gun_Status status = Gun.GetComponent<Gun_Status>();
+        Gun_Status GS = New_Gun.GetComponent<Gun_Status>();
+        Destroy(EquipGun.gameObject);
 
-		GetComponent<Shooting>().StatusChange(status);
-		Gun_Ready(Gun);
+        GS.ZoomCamera.enabled = false;
+        GS.ZoomCamera.targetDisplay = 0;
+
+        ShootPos = GS.ShootPos;
+        New_Gun.GetComponent<BoxCollider>().enabled = false;
+        New_Gun.GetComponent<Rigidbody>().useGravity = false;
+
+        Gun_Ready(New_Gun);
+        Gun_Change(New_Gun);
 	}
 
-	void Gun_Ready(GameObject Gun)
+	void Gun_Ready(GameObject New_Gun)
 	{
-		Gun.transform.parent = Gun_Pos;
-		Gun.transform.position = new Vector3(0, 0, 0);
-	}
+        Gun_Status GS = New_Gun.GetComponent<Gun_Status>();
+
+        New_Gun.transform.parent = Gun_Pos;
+        New_Gun.transform.position = Gun_Pos.position;
+        New_Gun.transform.localEulerAngles = GS.StandardRotation;
+    }
 
     private void OnDrawGizmos()
     {
@@ -70,10 +99,14 @@ public class PlayerWeaponInterface : MonoBehaviour {
         Gizmos.DrawSphere(ShootPos.transform.position, Size);
     }
 
-    bool On_PickUpCheck()
+    bool On_PickUpCheck(Collider[] collider)
     {
-        Collider[] collider = Physics.OverlapSphere(ShootPos.transform.position, Size, PickUp_Mask);
-
         return collider.Length > 0 ? true : false;
+    }
+
+    public void Gun_Change(GameObject gun)
+    {
+        EquipGun = gun;
+        shooting.StatusChange(gun.GetComponent<Gun_Status>());
     }
 }
