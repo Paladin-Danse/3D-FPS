@@ -39,7 +39,12 @@ public class Shooting : MonoBehaviour {
 	bool On_Correction = false;
 	bool Zoom;
 
-	
+    [SerializeField]
+	public enum AutoType
+    {
+        Auto,
+        SemiAuto
+    }
 
     [SerializeField]
     GameObject Bullet;
