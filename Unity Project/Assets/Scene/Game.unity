@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -970,16 +970,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6e1d3837143dcf45ac2dc8d6c6dee60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Gun_Pos: {fileID: 1353725792}
-  PickUp_Text: {fileID: 1745109989}
-  PlayerCamera: {fileID: 347483008}
-  ShootPos: {fileID: 1190023960}
   GizmosColor: {r: 1, g: 1, b: 0, a: 1}
   PickUp_Mask:
     serializedVersion: 2
     m_Bits: 256
   Offset: 2
   Size: 1
+  PickUp_Text: {fileID: 1745109989}
+  Gun_Pos: {fileID: 1353725792}
+  PlayerCamera: {fileID: 347483008}
   EquipGun: {fileID: 839169026}
 --- !u!4 &1190023960 stripped
 Transform:

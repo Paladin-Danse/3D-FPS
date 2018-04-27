@@ -507,7 +507,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85e855495b993ce489dc229b6012b40c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StandardRotation: {x: -90, y: 180, z: 0, w: 0}
+  StandardRotation: {x: -90, y: 180, z: 0}
   ShootPos: {fileID: 4681704758308554}
   ZoomCamera: {fileID: 20975665640996710}
   Accuracy: 80
@@ -515,6 +515,7 @@ MonoBehaviour:
   Recoil_value: 1
   ReloadTime: 1.5
   Magazine: 15
+  Mode_Type: 1
 --- !u!124 &124244590736513904
 Behaviour:
   m_ObjectHideFlags: 1

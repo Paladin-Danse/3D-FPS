@@ -13,8 +13,15 @@ public class Gun_Status : MonoBehaviour {
 	public float ReloadTime;
 	public int Magazine;
 
-	// Use this for initialization
-	void Start () {
+    public enum AutoType
+    {
+        Auto,
+        SemiAuto
+    }
+    public AutoType Mode_Type;
+
+    // Use this for initialization
+    void Start () {
 		
 	}
 	

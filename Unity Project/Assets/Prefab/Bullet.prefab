@@ -111,7 +111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0be78ba31ccac864c89ec183ac0df155, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 50
+  Speed: 200
   Damaged_Wall: {fileID: 1336422346410834, guid: c66ce0bad1f87084887987dfcab3692a,
     type: 2}
 --- !u!135 &135631687485135252

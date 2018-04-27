@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Shooting : MonoBehaviour {
+public partial class Shooting : MonoBehaviour {
 	[SerializeField]
 	Camera PlayerCamera;
 	[SerializeField]
@@ -22,12 +22,10 @@ public class Shooting : MonoBehaviour {
 	[SerializeField]
 	float ReloadTime;
 
-	float NowTime;
-
 	[SerializeField]
 	int Ammo;
 	[SerializeField]
-	int Magazine;
+    int Magazine;
 
 	[SerializeField]
 	Vector3 Recoil_Angles;
@@ -35,16 +33,11 @@ public class Shooting : MonoBehaviour {
 	float Correction_Time;
 
 	bool On_Delay = false;
-	bool On_Reload_Delay = false;
-	bool On_Correction = false;
+    bool On_Reload_Delay = false;
+    bool On_Correction = false;
 	bool Zoom;
 
-    [SerializeField]
-	public enum AutoType
-    {
-        Auto,
-        SemiAuto
-    }
+    Gun_Status.AutoType _autoType;
 
     [SerializeField]
     GameObject Bullet;
@@ -55,8 +48,11 @@ public class Shooting : MonoBehaviour {
 
 	Vector3 v;
 
-	// Use this for initialization
-	void Awake () {
+    Ray shootRay;
+    RaycastHit shootHit;
+
+    // Use this for initialization
+    void Awake () {
 		PlayerCamera.enabled = true;
 		ZoomCamera.enabled = false;
 	}
@@ -73,7 +69,7 @@ public class Shooting : MonoBehaviour {
 	void FixedUpdate () {
 		Mouse1();
 		Mouse2();
-		Reload();
+        On_Reload();
 
 		if(On_Correction)
 		{
@@ -84,7 +80,10 @@ public class Shooting : MonoBehaviour {
 	IEnumerator On_Fire()
 	{
 		AmmoCount();
-		Instantiate(Bullet, ShootPos.position, Gun_Accuracy());
+
+        shootRay.origin = transform.position;
+        shootRay.direction = transform.forward;
+        Instantiate(Bullet, ShootPos.position, Gun_Accuracy());
 
 		Shoot_Recoil();
 		On_Delay = true;
@@ -95,20 +94,7 @@ public class Shooting : MonoBehaviour {
 		On_Delay = false;
 		On_Correction = false;
 	}
-	IEnumerator On_Reload()
-	{
-		On_Reload_Delay = true;
-		NowTime = 0;
-
-		Debug.Log(On_Reload_Delay);
-
-		yield return new WaitForSeconds(ReloadTime);
-
-		Ammo = Magazine;
-		AmmoText.text = Ammo.ToString() + " / " + Magazine.ToString();
-		On_Reload_Delay = false;
-		Debug.Log(On_Reload_Delay);
-	}
+	
 	void Mouse1()
 	{
 		if(Input.GetMouseButtonDown(0))
@@ -120,7 +106,7 @@ public class Shooting : MonoBehaviour {
 		else if (Input.GetMouseButton(0))
 		{
 			Mouse2();
-			if(On_Delay || Ammo <= 0 || On_Reload_Delay || !ShootPos) return;
+			if(On_Delay || Ammo <= 0 || On_Reload_Delay || !ShootPos || _autoType == Gun_Status.AutoType.SemiAuto) return;
 
 			StartCoroutine("On_Fire");
 		}
@@ -176,42 +162,15 @@ public class Shooting : MonoBehaviour {
 		PlayerCamera.enabled = true;
 		Accuracy = None_Aim_Acc;
 	}
-
-	void Reload()
-	{
-		if(Input.GetKeyDown(KeyCode.R))
-		{
-			if(On_Reload_Delay || Magazine == Ammo ) return;
-
-			StartCoroutine("On_Reload");
-		}
-
-		if(On_Reload_Delay)
-		{
-			NowTime += Time.deltaTime;
-			Reload_Gauge.value = NowTime / ReloadTime;
-		}
-		else
-		{
-			NowTime = 0;
-		}
-	}
+	
 	void correction()
 	{
 		PlayerCamera.transform.eulerAngles = Vector3.MoveTowards(PlayerCamera.transform.eulerAngles, v, Correction_Time * Time.deltaTime);
 	}
 
-	Quaternion Gun_Accuracy()
-	{
-		Quaternion Acc_Angle = ShootPos.rotation;
-
-		Acc_Angle.eulerAngles += new Vector3((Random.Range(-10.0f + (Accuracy/10.0f), 10.0f - (Accuracy/10.0f))) - 1f, Random.Range(-10.0f + (Accuracy/10.0f) , 10.0f - (Accuracy/10.0f)), ShootPos.rotation.z);
-		Debug.Log(Random.Range(-10.0f + (Accuracy/10.0f), 10.0f - (Accuracy/10.0f)));
-		return Acc_Angle;
-	}
-
 	public void StatusChange(Gun_Status status)
 	{
+        _autoType = status.Mode_Type;
 		ShootPos = status.ShootPos;
 		ZoomCamera = status.ZoomCamera;
 
@@ -220,6 +179,12 @@ public class Shooting : MonoBehaviour {
         Rate_Of_Fire = status.Rate_Of_Fire;
         Recoil_value = status.Recoil_value;
         ReloadTime = status.ReloadTime;
+        if (On_Reload_Delay)
+        {
+            StopCoroutine("Weapon_Reload");
+            On_Reload_Delay = false;
+            Reload_Gauge.value = 1;
+        }
         Magazine = status.Magazine;
 		Ammo = Magazine;
 

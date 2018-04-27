@@ -1,29 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEditor;
 
-public class PlayerWeaponInterface : MonoBehaviour {
+public class PlayerWeaponInterface : PickupItem {
     Shooting shooting;
     public Transform Gun_Pos;
-
-	Ray Action_Ray;
-	RaycastHit Action_Hit;
-    LayerMask Item_Mask;
-    bool isPickUp;
-
-    float Range = 2.0f;
-
-    public Text PickUp_Text;
+    
     public GameObject PlayerCamera;
-    public Transform ShootPos;
-
-    [Header("PickUp Check")]
-    public Color GizmosColor;
-    public LayerMask PickUp_Mask;
-    public float Offset = 2f;
-    public float Size = 1f;
 
     [SerializeField]
     GameObject EquipGun;
@@ -39,6 +23,7 @@ public class PlayerWeaponInterface : MonoBehaviour {
         {
             Gun_Status gunStatus = EquipGun.GetComponent<Gun_Status>();
             shooting.StatusChange(gunStatus);
+            Target = gunStatus.ShootPos;
         }
     }
 
@@ -49,23 +34,17 @@ public class PlayerWeaponInterface : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        Action_Ray.origin = Gun_Pos.transform.position;
-        Action_Ray.direction = Gun_Pos.transform.forward;
-        Debug.DrawRay(Action_Ray.origin, Action_Ray.direction, Color.yellow);
 
-        Collider[] collider = Physics.OverlapSphere(ShootPos.transform.position, Size, PickUp_Mask);
-        isPickUp = On_PickUpCheck(collider);
+        On_PickUp();
 
-        PickUp_Text.enabled = isPickUp;
-        
-        if(isPickUp && collider.Length > 0)
+        if (isPickUp && collider.Length > 0)
         {
             if (Input.GetKeyDown(KeyCode.F))
             {
                 Get_Gun(collider[0].gameObject);
             }
-		}
-	}
+        }
+    }
 
 	void Get_Gun(GameObject New_Gun)
 	{
@@ -75,7 +54,7 @@ public class PlayerWeaponInterface : MonoBehaviour {
         GS.ZoomCamera.enabled = false;
         GS.ZoomCamera.targetDisplay = 0;
 
-        ShootPos = GS.ShootPos;
+        Target = GS.ShootPos;
         New_Gun.GetComponent<BoxCollider>().enabled = false;
         New_Gun.GetComponent<Rigidbody>().useGravity = false;
 
@@ -94,15 +73,14 @@ public class PlayerWeaponInterface : MonoBehaviour {
 
     private void OnDrawGizmos()
     {
+        if (!Target) return;
+
         Gizmos.color = GizmosColor;
         
-        Gizmos.DrawSphere(ShootPos.transform.position, Size);
+        Gizmos.DrawSphere(Target.transform.position, Size);
     }
 
-    bool On_PickUpCheck(Collider[] collider)
-    {
-        return collider.Length > 0 ? true : false;
-    }
+    
 
     public void Gun_Change(GameObject gun)
     {
