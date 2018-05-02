@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class PlayerMove : MonoBehaviour {
 	[SerializeField]
@@ -13,8 +14,13 @@ public class PlayerMove : MonoBehaviour {
 	[SerializeField]
 	Camera PlayerCamera;
 
+    [Header("Ground Check")]
+    public Color GizmosColor;
+    public LayerMask GroundLayer;
+    public Vector3 Offset;
+    public float Radius = 1;
 
-	/*
+    /*
 	public float Speed
 	{
 		get
@@ -34,8 +40,8 @@ public class PlayerMove : MonoBehaviour {
 		}
 	}
 */
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
 		
 	}
 	
@@ -56,9 +62,26 @@ public class PlayerMove : MonoBehaviour {
 			PlayerCamera.transform.eulerAngles += new Vector3(-Input.GetAxis("Mouse Y") * MouseSensitivity, transform.rotation.x, transform.rotation.z);
 		}
 
-		if(Input.GetKeyDown(KeyCode.Space))
-		{
-			GetComponent<Rigidbody>().AddForce(Vector3.up * JumpPower);
-		}
+        if (CheckGround())
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                GetComponent<Rigidbody>().AddForce(Vector3.up * JumpPower * Time.fixedDeltaTime, ForceMode.Impulse);
+            }
+        }
 	}
+    private void OnDrawGizmos()
+    {
+        Handles.color = GizmosColor;
+
+        Handles.DrawSphere(0, transform.position + Offset, Quaternion.identity, Radius);
+    }
+
+    bool CheckGround()
+    {
+        Collider[] collider = Physics.OverlapSphere(transform.position + Offset, Radius, GroundLayer);
+
+        return collider.Length > 0 ? true : false;
+    }
+
 }

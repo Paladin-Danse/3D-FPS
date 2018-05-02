@@ -22,8 +22,11 @@ public class PlayerWeaponInterface : PickupItem {
         if (EquipGun)
         {
             Gun_Status gunStatus = EquipGun.GetComponent<Gun_Status>();
+            gunStatus.ZoomCamera.targetDisplay = 0;
             shooting.StatusChange(gunStatus);
             Target = gunStatus.ShootPos;
+            EquipGun.GetComponent<BoxCollider>().enabled = false;
+            EquipGun.GetComponent<Rigidbody>().useGravity = false;
         }
     }
 
@@ -36,6 +39,9 @@ public class PlayerWeaponInterface : PickupItem {
 	void Update () {
 
         On_PickUp();
+
+        if (EquipGun) EquipGun.transform.localPosition = Vector3.zero;
+
 
         if (isPickUp && collider.Length > 0)
         {

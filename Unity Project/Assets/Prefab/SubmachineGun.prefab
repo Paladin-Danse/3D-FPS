@@ -123,6 +123,8 @@ GameObject:
   - component: {fileID: 4024862019175966}
   - component: {fileID: 95559750544648734}
   - component: {fileID: 114241426781648246}
+  - component: {fileID: 54472725146325840}
+  - component: {fileID: 65043412771091084}
   m_Layer: 8
   m_Name: SubmachineGun
   m_TagString: Untagged
@@ -500,7 +502,7 @@ Camera:
     m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 0
+  m_TargetDisplay: 1
   m_TargetEye: 3
   m_HDR: 1
   m_AllowMSAA: 1
@@ -1001,6 +1003,33 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1794413990277782}
   m_Mesh: {fileID: 4300010, guid: 11604b6592771e049af136d2cae807b4, type: 3}
+--- !u!54 &54472725146325840
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1534423766357156}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &65043412771091084
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1534423766357156}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2, y: 2, z: 2}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!95 &95559750544648734
 Animator:
   serializedVersion: 3
@@ -1033,7 +1062,7 @@ MonoBehaviour:
   ShootPos: {fileID: 4410654235467450}
   ZoomCamera: {fileID: 20136132395532034}
   Accuracy: 90
-  Rate_Of_Fire: 0.11
+  Rate_Of_Fire: 0.02
   Recoil_value: 0.8
   ReloadTime: 3
   Magazine: 30
