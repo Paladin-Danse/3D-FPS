@@ -21,6 +21,8 @@ public partial class Shooting : MonoBehaviour {
 	float None_Aim_Acc;
 	[SerializeField]
 	float ReloadTime;
+    [SerializeField]
+    float Range = 600.0f;
 
 	[SerializeField]
 	int Ammo;
@@ -36,7 +38,8 @@ public partial class Shooting : MonoBehaviour {
     bool On_Reload_Delay = false;
     bool On_Correction = false;
 	bool Zoom;
-
+    bool On_Zoom_Button;
+    
     Gun_Status.AutoType _autoType;
 
     [SerializeField]
@@ -50,12 +53,18 @@ public partial class Shooting : MonoBehaviour {
 
     Ray shootRay;
     RaycastHit shootHit;
+    public LayerMask Target;
+    LineRenderer gunLine;
 
+    public float timeBetweenBullets = 0.15f;
+    float timer;
+    float effectsDisplayTime = 0.2f;
     // Use this for initialization
     void Awake () {
 		PlayerCamera.enabled = true;
 		ZoomCamera.enabled = false;
-	}
+        gunLine = GetComponent<LineRenderer>();
+    }
 
 	void Start()
 	{
@@ -64,10 +73,22 @@ public partial class Shooting : MonoBehaviour {
 		AmmoText.text = Ammo.ToString() + " / " + Magazine.ToString();
 		v = PlayerCamera.transform.eulerAngles;
 	}
-	
-	// Update is called once per frame
-	void FixedUpdate () {
-		Mouse1();
+
+    void Update()
+    {
+        Zoom_Key();
+        timer += Time.deltaTime;
+
+        if (timer >= timeBetweenBullets * effectsDisplayTime)
+        {
+            DisableEffects();
+        }
+    }
+
+    // Update is called once per frame
+    void FixedUpdate () {
+        
+        Mouse1();
 		Mouse2();
         On_Reload();
 
@@ -80,11 +101,24 @@ public partial class Shooting : MonoBehaviour {
 	IEnumerator On_Fire()
 	{
 		AmmoCount();
+        timer = 0;
 
-        shootRay.origin = transform.position;
-        shootRay.direction = transform.forward;
+        shootRay.origin = ShootPos.position;
+        shootRay.direction = ShootPos.forward;
+
+        gunLine.enabled = true;
+        gunLine.SetPosition(0, ShootPos.position);
+
+        if(Physics.Raycast(shootRay, out shootHit, Target))
+        {
+            gunLine.SetPosition(1, shootHit.point);
+        }
+        else
+        {
+            gunLine.SetPosition(1, shootRay.origin + shootRay.direction * Range);
+        }
         Instantiate(Bullet, ShootPos.position, Gun_Accuracy());
-
+        
 		Shoot_Recoil();
 		On_Delay = true;
 		On_Correction = true;
@@ -120,8 +154,8 @@ public partial class Shooting : MonoBehaviour {
 		if(Input.GetMouseButtonDown(1))
 		{
 			if(!ZoomCamera) return;
-
-			Zoom_In();
+            
+            Zoom_In();
 		}
 		else if(Input.GetMouseButton(1))
 		{
@@ -189,5 +223,17 @@ public partial class Shooting : MonoBehaviour {
 		Ammo = Magazine;
 
         AmmoText.text = Ammo.ToString() + " / " + Magazine.ToString();
+    }
+    void Zoom_Key()
+    {
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            On_Zoom_Button = !On_Zoom_Button;
+        }
+    }
+
+    void DisableEffects()
+    {
+        gunLine.enabled = false;
     }
 }

@@ -12,4 +12,12 @@ public partial class Shooting {
         Debug.Log(Random.Range(-10.0f + (Accuracy / 10.0f), 10.0f - (Accuracy / 10.0f)));
         return Acc_Angle;
     }
+
+    Vector3 Accuracy_Vec3()
+    {
+        Vector3 Acc_Angle = ShootPos.forward;
+
+        Acc_Angle += new Vector3((Random.Range(-10.0f + (Accuracy / 10.0f), 10.0f - (Accuracy / 10.0f))), Random.Range(-10.0f + (Accuracy / 10.0f), 10.0f - (Accuracy / 10.0f)), ShootPos.rotation.z);
+        return Acc_Angle;
+    }
 }
