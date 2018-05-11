@@ -955,18 +955,14 @@ MonoBehaviour:
   PlayerCamera: {fileID: 347483012}
   ZoomCamera: {fileID: 55580621}
   ShootPos: {fileID: 1190023960}
-  Rate_Of_Fire: 0
-  Recoil_value: 0
-  Accuracy: 0
-  ReloadTime: 0
-  Range: 0
-  Ammo: 0
-  Magazine: 0
+  Damaged_Wall: {fileID: 1336422346410834, guid: c66ce0bad1f87084887987dfcab3692a,
+    type: 2}
   Recoil_Angles: {x: 0, y: 0, z: 0}
-  Correction_Time: 3
+  Correction_Time: 5
   Bullet: {fileID: 1142845765224642, guid: 590315b32b6a01143859ff3805c95932, type: 2}
   AmmoText: {fileID: 983829343}
   Reload_Gauge: {fileID: 57213328}
+  shootPrevCamVec: {x: 0, y: 0, z: 0}
   Target:
     serializedVersion: 2
     m_Bits: 1024
@@ -1006,7 +1002,7 @@ LineRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: bfcfc1b8a6069ee4fa96041cfc0c0254, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1036,7 +1032,7 @@ LineRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 2
-        time: 0.0051822662
+        time: 0.0103645325
         value: 0.085105896
         inSlope: 0
         outSlope: 0
@@ -1190,7 +1186,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1353725791}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -1, z: 2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1235,7 +1231,27 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4024862019175966, guid: 0ce96cb96c129b84ead33b5e2f8a8f19, type: 2}
       propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114241426781648246, guid: 0ce96cb96c129b84ead33b5e2f8a8f19,
+        type: 2}
+      propertyPath: Accuracy
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 54472725146325840, guid: 0ce96cb96c129b84ead33b5e2f8a8f19,
+        type: 2}
+      propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 54472725146325840, guid: 0ce96cb96c129b84ead33b5e2f8a8f19,
+        type: 2}
+      propertyPath: m_UseGravity
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114241426781648246, guid: 0ce96cb96c129b84ead33b5e2f8a8f19,
+        type: 2}
+      propertyPath: Recoil_value
+      value: 0.8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0ce96cb96c129b84ead33b5e2f8a8f19, type: 2}
@@ -1438,6 +1454,21 @@ Prefab:
     - target: {fileID: 1077857508971200, guid: 9b1f1e9787843204b840b15ce19b59d1, type: 2}
       propertyPath: m_Layer
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 65132508920617206, guid: 9b1f1e9787843204b840b15ce19b59d1,
+        type: 2}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 65132508920617206, guid: 9b1f1e9787843204b840b15ce19b59d1,
+        type: 2}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 65132508920617206, guid: 9b1f1e9787843204b840b15ce19b59d1,
+        type: 2}
+      propertyPath: m_Size.z
+      value: 1.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9b1f1e9787843204b840b15ce19b59d1, type: 2}
@@ -1728,4 +1759,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16e12132152cda64ca92dbc08430a8aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HP: 1000
+  HP: 6000

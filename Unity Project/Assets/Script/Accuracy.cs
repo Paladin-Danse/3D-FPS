@@ -17,7 +17,7 @@ public partial class Shooting {
     {
         Vector3 Acc_Angle = ShootPos.forward;
 
-        Acc_Angle += new Vector3((Random.Range(-10.0f + (Accuracy / 10.0f), 10.0f - (Accuracy / 10.0f))), Random.Range(-10.0f + (Accuracy / 10.0f), 10.0f - (Accuracy / 10.0f)), ShootPos.rotation.z);
+        Acc_Angle += new Vector3((Random.Range(-0.1f + (Accuracy / 1000.0f), 0.1f - (Accuracy / 1000.0f))), Random.Range(-0.1f + (Accuracy / 1000.0f) - 0.1f, 0.1f - (Accuracy / 1000.0f)), 0);
         return Acc_Angle;
     }
 }

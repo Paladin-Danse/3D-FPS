@@ -60,6 +60,11 @@ public class PlayerMove : MonoBehaviour {
 		if(Input.GetAxis("Mouse Y") != 0)
 		{
 			PlayerCamera.transform.eulerAngles += new Vector3(-Input.GetAxis("Mouse Y") * MouseSensitivity, transform.rotation.x, transform.rotation.z);
+
+            if(GetComponent<Shooting>())
+            {
+                GetComponent<Shooting>().SetCamVec(PlayerCamera.transform.eulerAngles);
+            }
 		}
 
         if (CheckGround())

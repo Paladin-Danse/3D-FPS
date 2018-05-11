@@ -11,24 +11,19 @@ public partial class Shooting : MonoBehaviour {
     
 	[SerializeField]
 	Transform ShootPos;
-	[SerializeField]
+	
 	float Rate_Of_Fire;
-	[SerializeField]
 	float Recoil_value;
-	[SerializeField]
 	float Accuracy;
 	float Aim_Acc = 100.0f;
 	float None_Aim_Acc;
-	[SerializeField]
 	float ReloadTime;
-    [SerializeField]
     float Range = 600.0f;
 
-	[SerializeField]
 	int Ammo;
-	[SerializeField]
-    int Magazine;
-
+	int Magazine;
+    
+    public GameObject Damaged_Wall;
 	[SerializeField]
 	Vector3 Recoil_Angles;
 	[SerializeField]
@@ -37,8 +32,7 @@ public partial class Shooting : MonoBehaviour {
 	bool On_Delay = false;
     bool On_Reload_Delay = false;
     bool On_Correction = false;
-	bool Zoom;
-    bool On_Zoom_Button;
+	
     
     Gun_Status.AutoType _autoType;
 
@@ -49,7 +43,8 @@ public partial class Shooting : MonoBehaviour {
     public Text AmmoText;
 	public Slider Reload_Gauge;
 
-	Vector3 v;
+    [SerializeField]
+	Vector3 shootPrevCamVec;
 
     Ray shootRay;
     RaycastHit shootHit;
@@ -71,7 +66,7 @@ public partial class Shooting : MonoBehaviour {
 		Ammo = Magazine;
 		None_Aim_Acc = Accuracy;
 		AmmoText.text = Ammo.ToString() + " / " + Magazine.ToString();
-		v = PlayerCamera.transform.eulerAngles;
+		shootPrevCamVec = PlayerCamera.transform.eulerAngles;
 	}
 
     void Update()
@@ -87,46 +82,50 @@ public partial class Shooting : MonoBehaviour {
 
     // Update is called once per frame
     void FixedUpdate () {
-        
         Mouse1();
 		Mouse2();
         On_Reload();
 
-		if(On_Correction)
-		{
-			correction();
-		}
+        correction();
 	}
 
 	IEnumerator On_Fire()
 	{
 		AmmoCount();
         timer = 0;
-
+        
         shootRay.origin = ShootPos.position;
-        shootRay.direction = ShootPos.forward;
+        shootRay.direction = Accuracy_Vec3();
 
         gunLine.enabled = true;
         gunLine.SetPosition(0, ShootPos.position);
 
+        
+
         if(Physics.Raycast(shootRay, out shootHit, Target))
         {
             gunLine.SetPosition(1, shootHit.point);
+
+            if (shootHit.collider.GetComponent<Target>())
+            {
+                shootHit.collider.GetComponent<Target>().HP_Lost();
+                GameObject Damaged_Object = Instantiate(Damaged_Wall, shootHit.point, shootHit.transform.rotation);
+                Damaged_Object.transform.parent = shootHit.collider.transform;
+            }
         }
         else
         {
             gunLine.SetPosition(1, shootRay.origin + shootRay.direction * Range);
         }
-        Instantiate(Bullet, ShootPos.position, Gun_Accuracy());
+        
+        //Instantiate(Bullet, ShootPos.position, Gun_Accuracy());
         
 		Shoot_Recoil();
 		On_Delay = true;
-		On_Correction = true;
 
 		yield return new WaitForSeconds(Rate_Of_Fire);
 
 		On_Delay = false;
-		On_Correction = false;
 	}
 	
 	void Mouse1()
@@ -149,29 +148,11 @@ public partial class Shooting : MonoBehaviour {
 
 		}
 	}
-	void Mouse2()
-	{
-		if(Input.GetMouseButtonDown(1))
-		{
-			if(!ZoomCamera) return;
-            
-            Zoom_In();
-		}
-		else if(Input.GetMouseButton(1))
-		{
-
-		}
-		if(Input.GetMouseButtonUp(1))
-		{
-			if(!ZoomCamera) return;
-
-			Zoom_Out();
-		}
-	}
+	
 
 	void Shoot_Recoil()
 	{
-		v = PlayerCamera.transform.eulerAngles;
+		shootPrevCamVec = PlayerCamera.transform.eulerAngles;
 
 		PlayerCamera.transform.eulerAngles += Vector3.left * Recoil_value;
 	}
@@ -183,23 +164,9 @@ public partial class Shooting : MonoBehaviour {
 		AmmoText.text = Ammo.ToString() + " / " + Magazine.ToString();
 	}
 
-	void Zoom_In()
-	{
-		PlayerCamera.enabled = false;
-		ZoomCamera.enabled = true;
-		Accuracy = Aim_Acc;
-	}
-
-	void Zoom_Out()
-	{
-		ZoomCamera.enabled = false;
-		PlayerCamera.enabled = true;
-		Accuracy = None_Aim_Acc;
-	}
-	
 	void correction()
 	{
-		PlayerCamera.transform.eulerAngles = Vector3.MoveTowards(PlayerCamera.transform.eulerAngles, v, Correction_Time * Time.deltaTime);
+		PlayerCamera.transform.eulerAngles = Vector3.MoveTowards(PlayerCamera.transform.eulerAngles, shootPrevCamVec, Correction_Time * Time.deltaTime);
 	}
 
 	public void StatusChange(Gun_Status status)
@@ -224,16 +191,15 @@ public partial class Shooting : MonoBehaviour {
 
         AmmoText.text = Ammo.ToString() + " / " + Magazine.ToString();
     }
-    void Zoom_Key()
-    {
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            On_Zoom_Button = !On_Zoom_Button;
-        }
-    }
+    
 
     void DisableEffects()
     {
         gunLine.enabled = false;
+    }
+
+    public void SetCamVec(Vector3 angle)
+    {
+        shootPrevCamVec = angle;
     }
 }
