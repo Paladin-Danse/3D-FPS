@@ -4,27 +4,23 @@ using UnityEngine;
 
 public class Target : MonoBehaviour {
 	[SerializeField]
-	int HP;
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		if(HP <= 0)
-		{
-			Die();
-		}
+	private float HP;
+
+    public virtual void FixedUpdate()
+    {
+        if (HP <= 0)
+        {
+            Die();
+        }
+    }
+
+    public virtual void HP_Lost(float Damage)
+	{
+        HP -= Damage;
 	}
 
-	public void HP_Lost()
-	{
-		HP -= 50;
-	}
-
-	public void Die()
-	{
-		Destroy(gameObject);
-	}
+    protected virtual void Die()
+    {
+        Destroy(gameObject);
+    }
 }

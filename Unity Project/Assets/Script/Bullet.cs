@@ -21,7 +21,6 @@ public class Bullet : MonoBehaviour {
 	{
 		if(collider.gameObject.GetComponent<Target>())
 		{
-			collider.gameObject.GetComponent<Target>().HP_Lost();
 			GameObject Damaged_Object = Instantiate(Damaged_Wall, gameObject.transform);
 			Damaged_Object.transform.parent = collider.transform;
 		}

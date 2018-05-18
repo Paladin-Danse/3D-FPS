@@ -8,7 +8,7 @@ public partial class Shooting {
 
     void Mouse2()
     {
-        if (Input.GetMouseButtonDown(1) || On_Zoom_Button)
+        if (On_Zoom_Button)
         {
             if (!ZoomCamera) return;
 
@@ -18,7 +18,7 @@ public partial class Shooting {
         {
 
         }
-        if (Input.GetMouseButtonUp(1) || !On_Zoom_Button)
+        if (!On_Zoom_Button)
         {
             if (!ZoomCamera) return;
 
@@ -30,6 +30,7 @@ public partial class Shooting {
     {
         PlayerCamera.enabled = false;
         ZoomCamera.enabled = true;
+        Standard_Accuracy = Aim_Acc;
         Accuracy = Aim_Acc;
     }
 
@@ -37,6 +38,7 @@ public partial class Shooting {
     {
         ZoomCamera.enabled = false;
         PlayerCamera.enabled = true;
+        Standard_Accuracy = None_Aim_Acc;
         Accuracy = None_Aim_Acc;
     }
 
@@ -45,6 +47,18 @@ public partial class Shooting {
         if (Input.GetKeyDown(KeyCode.T))
         {
             On_Zoom_Button = !On_Zoom_Button;
+            Mouse2();
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            On_Zoom_Button = true;
+            Mouse2();
+        }
+        if (Input.GetMouseButtonUp(1))
+        {
+            On_Zoom_Button = false;
+            Mouse2();
         }
     }
 

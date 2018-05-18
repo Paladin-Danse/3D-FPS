@@ -12,6 +12,7 @@ public class Gun_Status : MonoBehaviour {
 	public float Recoil_value;
 	public float ReloadTime;
 	public int Magazine;
+    public float Gun_Power;
 
     public enum AutoType
     {

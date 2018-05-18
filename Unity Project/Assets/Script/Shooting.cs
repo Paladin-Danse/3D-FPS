@@ -15,10 +15,12 @@ public partial class Shooting : MonoBehaviour {
 	float Rate_Of_Fire;
 	float Recoil_value;
 	float Accuracy;
+    float Standard_Accuracy;
 	float Aim_Acc = 100.0f;
 	float None_Aim_Acc;
 	float ReloadTime;
     float Range = 600.0f;
+    float Gun_Power;
 
 	int Ammo;
 	int Magazine;
@@ -28,8 +30,10 @@ public partial class Shooting : MonoBehaviour {
 	Vector3 Recoil_Angles;
 	[SerializeField]
 	float Correction_Time;
+    [SerializeField]
+    float Correction_Force;
 
-	bool On_Delay = false;
+    bool On_Delay = false;
     bool On_Reload_Delay = false;
     bool On_Correction = false;
 	
@@ -83,7 +87,6 @@ public partial class Shooting : MonoBehaviour {
     // Update is called once per frame
     void FixedUpdate () {
         Mouse1();
-		Mouse2();
         On_Reload();
 
         correction();
@@ -91,6 +94,7 @@ public partial class Shooting : MonoBehaviour {
 
 	IEnumerator On_Fire()
 	{
+
 		AmmoCount();
         timer = 0;
         
@@ -100,15 +104,13 @@ public partial class Shooting : MonoBehaviour {
         gunLine.enabled = true;
         gunLine.SetPosition(0, ShootPos.position);
 
-        
-
         if(Physics.Raycast(shootRay, out shootHit, Target))
         {
             gunLine.SetPosition(1, shootHit.point);
 
             if (shootHit.collider.GetComponent<Target>())
             {
-                shootHit.collider.GetComponent<Target>().HP_Lost();
+                shootHit.collider.GetComponent<Target>().HP_Lost(Gun_Power);
                 GameObject Damaged_Object = Instantiate(Damaged_Wall, shootHit.point, shootHit.transform.rotation);
                 Damaged_Object.transform.parent = shootHit.collider.transform;
             }
@@ -138,7 +140,6 @@ public partial class Shooting : MonoBehaviour {
 		}
 		else if (Input.GetMouseButton(0))
 		{
-			Mouse2();
 			if(On_Delay || Ammo <= 0 || On_Reload_Delay || !ShootPos || _autoType == Gun_Status.AutoType.SemiAuto) return;
 
 			StartCoroutine("On_Fire");
@@ -155,7 +156,10 @@ public partial class Shooting : MonoBehaviour {
 		shootPrevCamVec = PlayerCamera.transform.eulerAngles;
 
 		PlayerCamera.transform.eulerAngles += Vector3.left * Recoil_value;
-	}
+        
+        Accuracy -= (Recoil_value * 10f);
+        if (Accuracy < 0) Accuracy = 0;
+    }
 
 	void AmmoCount()
 	{
@@ -167,6 +171,10 @@ public partial class Shooting : MonoBehaviour {
 	void correction()
 	{
 		PlayerCamera.transform.eulerAngles = Vector3.MoveTowards(PlayerCamera.transform.eulerAngles, shootPrevCamVec, Correction_Time * Time.deltaTime);
+
+        
+        if (Standard_Accuracy != Accuracy) Accuracy = Mathf.MoveTowards(Accuracy, Standard_Accuracy, Correction_Force * Time.deltaTime);
+        
 	}
 
 	public void StatusChange(Gun_Status status)
@@ -175,8 +183,12 @@ public partial class Shooting : MonoBehaviour {
 		ShootPos = status.ShootPos;
 		ZoomCamera = status.ZoomCamera;
 
-		Accuracy = status.Accuracy;
+        Standard_Accuracy = status.Accuracy;
+        Accuracy = status.Accuracy;
         None_Aim_Acc = Accuracy;
+
+        Gun_Power = status.Gun_Power;
+
         Rate_Of_Fire = status.Rate_Of_Fire;
         Recoil_value = status.Recoil_value;
         ReloadTime = status.ReloadTime;

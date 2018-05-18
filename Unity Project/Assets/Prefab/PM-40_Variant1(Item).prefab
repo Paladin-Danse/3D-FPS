@@ -515,6 +515,7 @@ MonoBehaviour:
   Recoil_value: 1
   ReloadTime: 1.5
   Magazine: 15
+  Gun_Power: 35
   Mode_Type: 1
 --- !u!124 &124244590736513904
 Behaviour:
