@@ -512,7 +512,7 @@ MonoBehaviour:
   ZoomCamera: {fileID: 20975665640996710}
   Accuracy: 80
   Rate_Of_Fire: 0.3
-  Recoil_value: 1
+  Recoil_value: 3
   ReloadTime: 1.5
   Magazine: 15
   Gun_Power: 35
