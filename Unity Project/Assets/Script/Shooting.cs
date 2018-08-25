@@ -40,9 +40,6 @@ public partial class Shooting : MonoBehaviour {
     
     Gun_Status.AutoType _autoType;
 
-    [SerializeField]
-    GameObject Bullet;
-
     //UI
     public Text AmmoText;
 	public Slider Reload_Gauge;
