@@ -73,6 +73,8 @@ public partial class Shooting : MonoBehaviour {
     void Update()
     {
         Zoom_Key();
+        Mouse1();
+        On_Reload();
         timer += Time.deltaTime;
 
         if (timer >= timeBetweenBullets * effectsDisplayTime)
@@ -83,9 +85,6 @@ public partial class Shooting : MonoBehaviour {
 
     // Update is called once per frame
     void FixedUpdate () {
-        Mouse1();
-        On_Reload();
-
         correction();
 	}
 

@@ -9,8 +9,11 @@ public partial class Shooting {
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            if (On_Reload_Delay || Ammo == Magazine) return;
-
+            if (On_Reload_Delay || Ammo == Magazine)
+            {
+                Debug.Log("On_Reload_Delay is True!");
+                return;
+            }
             StartCoroutine("Weapon_Reload");
         }
 
@@ -21,6 +24,7 @@ public partial class Shooting {
         }
         else
         {
+            Reload_Gauge.value = 1;
             NowTime = 0;
         }
     }
@@ -39,5 +43,4 @@ public partial class Shooting {
         On_Reload_Delay = false;
         Debug.Log(On_Reload_Delay);
     }
-
 }

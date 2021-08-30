@@ -77,9 +77,9 @@ public class PlayerMove : MonoBehaviour {
 	}
     private void OnDrawGizmos()
     {
-        Handles.color = GizmosColor;
+        //Handles.color = GizmosColor;
 
-        Handles.DrawSphere(0, transform.position + Offset, Quaternion.identity, Radius);
+        Gizmos.DrawSphere(transform.position + Offset, Radius);
     }
 
     bool CheckGround()
